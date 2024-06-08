@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Auction.Core.Models;
 
 namespace Auction.Core.Requests.Items;
 
@@ -12,10 +13,9 @@ public class UpdateItemRequest : Request
   public string Description { get; set; } = string.Empty;
 
   [Required(ErrorMessage = "Informe um lance inicial")]
-  public decimal InicialBid { get; set; } = 0;
+  public decimal InicialBidValue { get; set; } = 0;
   public DateTime CreatedAt { get; set; } = DateTime.Now;
   public DateTime TimeEndAuction { get; set; } = DateTime.Now.AddDays(3);
-  public decimal? HighestBid { get; set; } = 0;
-  public string? BidderId { get; set; }
-  public string? BidderName { get; set; }
+  public List<Bid>? Bids { get; set; } = null;
+  public Bid? HighestBid { get; set; } = null;
 }

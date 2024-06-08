@@ -1,6 +1,6 @@
 namespace Auction.Core.Requests.Items;
 
-public class DeleteItemRequest : Request
+public class GetByIdRequest : Request
 {
   public long Id { get; set; }
 }
