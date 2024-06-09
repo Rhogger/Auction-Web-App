@@ -1,6 +1,6 @@
-namespace Auction.Core.Requests.Items;
+namespace Auction.Core.Requests;
 
-public class GetAllRequest : PagedRequest
+public class GetAllRequest : Request
 {
-  
+
 }

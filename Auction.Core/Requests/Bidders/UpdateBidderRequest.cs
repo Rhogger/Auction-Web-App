@@ -1,9 +1,11 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Auction.Core.Requests.Bidders;
 
 public class UpdateBidderRequest : Request
 {
+  [JsonIgnore]
   public long Id { get; set; }
 
   [Required(ErrorMessage = "Nome é obrigatório")]

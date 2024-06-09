@@ -1,4 +1,4 @@
-namespace Auction.Core.Requests.Items;
+namespace Auction.Core.Requests;
 
 public class DeleteRequest : Request
 {
