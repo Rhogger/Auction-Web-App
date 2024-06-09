@@ -47,6 +47,9 @@ public class ItemHandler(AppDbContext context) : IItemHandler
       item.InicialBidValue = request.InicialBidValue;
       item.TimeEndAuction = request.TimeEndAuction;
 
+      if (item.TimeEndAuction <= item.CreatedAt.AddHours(1))
+        return new Response<Item?>(null, 400, "The item cannot be updated because the item's auction end time is less than the allowed time.");
+
       context.Items.Update(item);
       await context.SaveChangesAsync();
 
@@ -86,7 +89,42 @@ public class ItemHandler(AppDbContext context) : IItemHandler
                         .Items
                         .AsNoTracking()
                         .OrderBy(x => x.TimeEndAuction)
-                        .OrderBy(x => x.CreatedAt);
+                        .OrderBy(x => x.CreatedAt)
+                        .Select(item => new Item
+                        {
+                          Id = item.Id,
+                          Name = item.Name,
+                          Description = item.Description,
+                          InicialBidValue = item.InicialBidValue,
+                          CreatedAt = item.CreatedAt,
+                          TimeEndAuction = item.TimeEndAuction,
+                          Bids = item
+                                      .Bids
+                                      .Select(b => new Bid
+                                      {
+                                        Id = b.Id,
+                                        BidderId = b.BidderId,
+                                        Bidder = b.Bidder,
+                                        ItemFK = b.ItemFK,
+                                        BidValue = b.BidValue,
+                                      })
+                                      .ToList(),
+                          HighestBid = item.Bids.Any()
+                                                      ? item
+                                                            .Bids
+                                                            .Where(b => b.BidValue == item
+                                                                                          .Bids
+                                                                                          .Max(b => b.BidValue))
+                                                            .Select(b => new Bid
+                                                            {
+                                                              Id = b.Id,
+                                                              BidderId = b.BidderId,
+                                                              BidValue = b.BidValue,
+                                                              Bidder = b.Bidder
+                                                            })
+                                                            .FirstOrDefault()
+                                                      : null
+                        });
 
       var items = await query
                             .Skip((request.PageNumber - 1) * request.PageSize)
@@ -107,7 +145,48 @@ public class ItemHandler(AppDbContext context) : IItemHandler
   {
     try
     {
-      var item = await context.Items.AsNoTracking().FirstOrDefaultAsync(x => x.Id == request.Id);
+      var item = await context
+                              .Items
+                              .AsNoTracking()
+                              .Where(x => x.Id == request.Id)
+                              .Select(item => new Item
+                              {
+                                Id = item.Id,
+                                Name = item.Name,
+                                Description = item.Description,
+                                InicialBidValue = item.InicialBidValue,
+                                CreatedAt = item.CreatedAt,
+                                TimeEndAuction = item.TimeEndAuction,
+                                Bids = item
+                                          .Bids
+                                          .Select(b => new Bid
+                                          {
+                                            Id = b.Id,
+                                            BidderId = b.BidderId,
+                                            Bidder = b.Bidder,
+                                            ItemFK = b.ItemFK,
+                                            BidValue = b.BidValue,
+                                          })
+                                          .ToList(),
+                                HighestBid = item
+                                                  .Bids
+                                                  .Any()
+                                                        ? item
+                                                              .Bids
+                                                              .Where(b => b.BidValue == item
+                                                                                            .Bids
+                                                                                            .Max(b => b.BidValue))
+                                                              .Select(b => new Bid
+                                                              {
+                                                                Id = b.Id,
+                                                                BidderId = b.BidderId,
+                                                                BidValue = b.BidValue,
+                                                                Bidder = b.Bidder
+                                                              })
+                                                              .FirstOrDefault()
+                                                        : null
+                              })
+                              .FirstOrDefaultAsync();
 
       return item is null
         ? new Response<Item?>(null, 404, "Item not found.")
