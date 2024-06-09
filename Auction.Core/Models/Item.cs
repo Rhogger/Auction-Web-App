@@ -9,7 +9,5 @@ public class Item
   public DateTime CreatedAt { get; set; } = DateTime.Now;
   public DateTime TimeEndAuction { get; set; }
   public List<Bid>? Bids { get; set; } = null!;
-  public Bid? HighestBid { get; set; } = null!;
-
-  // Bids.OrderByDescending(b => b.BidValue).FirstOrDefault();
+  public Bid? HighestBid { get; set; }
 }
