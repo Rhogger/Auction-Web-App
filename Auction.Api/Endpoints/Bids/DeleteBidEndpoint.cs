@@ -13,7 +13,7 @@ public class DeleteBidEndpoint : IEndpoint
         .WithName("Bid: Delete")
         .WithSummary("Delete a bid")
         .WithDescription("Delete a bid")
-        .WithOrder(3)
+        .WithOrder(2)
         .Produces<Response<Bid?>>();
 
   private static async Task<IResult> HandleAsync(IBidHandler handler, long id)

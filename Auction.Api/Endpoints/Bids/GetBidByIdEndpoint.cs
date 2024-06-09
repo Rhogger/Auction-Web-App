@@ -13,7 +13,7 @@ public class GetBidByIdEndpoint : IEndpoint
         .WithName("Bids: Get by id")
         .WithSummary("Get bid by id")
         .WithDescription("Get bid by id")
-        .WithOrder(5)
+        .WithOrder(4)
         .Produces<Response<Bid?>>();
 
   public static async Task<IResult> HandleAsync(IBidHandler handler, long id)

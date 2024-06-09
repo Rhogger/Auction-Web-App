@@ -11,10 +11,6 @@ public static class Endpoint
   {
     var endpoints = app.MapGroup("");
 
-    endpoints.MapGroup("/")
-              .WithTags("Health Check")
-              .MapGet("/", () => new { message = "Ok" });
-
     endpoints.MapGroup("v1/bidders")
               .WithTags("Bidders")
               .MapEndpoint<CreateBidderEndpoint>()
@@ -35,7 +31,6 @@ public static class Endpoint
     endpoints.MapGroup("v1/bids")
               .WithTags("Bids")
               .MapEndpoint<CreateBidEndpoint>()
-              .MapEndpoint<UpdateBidEndpoint>()
               .MapEndpoint<DeleteBidEndpoint>()
               .MapEndpoint<GetAllBidsEndpoint>()
               .MapEndpoint<GetBidByIdEndpoint>();
