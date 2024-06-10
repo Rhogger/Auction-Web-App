@@ -10,7 +10,7 @@ public static class BuildExtension
 {
   public static void AddConfiguration(this WebApplicationBuilder builder)
   {
-    ApiConfiguration.Configuration = new ConfigurationBuilder().AddEnvironmentVariables().Build();
+    ApiConfiguration.Configuration = new ConfigurationBuilder().AddEnvironmentVariables("Default").Build();
 
     ApiConfiguration.ConnectionString = ApiConfiguration.Configuration.GetConnectionString("Default") ?? string.Empty;
     Configuration.BackendUrl = builder.Configuration.GetValue<string>("BackendUrl") ?? string.Empty;
