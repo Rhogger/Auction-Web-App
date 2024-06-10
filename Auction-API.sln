@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auction.Api", "Auction.Api\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auction.Core", "Auction.Core\Auction.Core.csproj", "{FF24E294-86B2-47E5-9FA6-A4782EDDFC28}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Auction.Web", "Auction.Web\Auction.Web.csproj", "{90B53D3A-B599-4256-BFA9-69D5A87E9174}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
