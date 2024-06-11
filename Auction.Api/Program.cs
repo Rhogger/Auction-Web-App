@@ -3,6 +3,7 @@ using Auction.Api.Common.Api;
 using Auction.Api.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddKeyVault();
 builder.AddConfiguration();
 builder.AddDataContext();
 builder.AddCrossOrigin();

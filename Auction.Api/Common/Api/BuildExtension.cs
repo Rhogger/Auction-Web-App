@@ -2,17 +2,33 @@ using Auction.Api.Data;
 using Auction.Api.Handlers;
 using Auction.Core;
 using Auction.Core.Handlers;
+using Azure.Identity;
+using Azure.Security.KeyVault.Secrets;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Auction.Api.Common.Api;
 
 public static class BuildExtension
 {
+  public static async void AddKeyVault(this WebApplicationBuilder builder)
+
+  {
+    string secretName = builder.Configuration["KeyVaultConfig:SecretName"];
+    string kvUri = builder.Configuration["KeyVaultConfig:KVUri"];
+
+    var credential = new DefaultAzureCredential();
+    var client = new SecretClient(new Uri(kvUri), credential);
+
+    var secret = await client.GetSecretAsync(secretName);
+
+    ApiConfiguration.ConnectionString = secret.Value.Value ?? string.Empty;
+
+    Console.WriteLine(ApiConfiguration.ConnectionString);
+  }
+
   public static void AddConfiguration(this WebApplicationBuilder builder)
   {
-    ApiConfiguration.Configuration = new ConfigurationBuilder().AddEnvironmentVariables("Default").Build();
-
-    ApiConfiguration.ConnectionString = ApiConfiguration.Configuration.GetConnectionString("Default") ?? string.Empty;
     Configuration.BackendUrl = builder.Configuration.GetValue<string>("BackendUrl") ?? string.Empty;
     Configuration.FrontendUrl = builder.Configuration.GetValue<string>("FrontendUrl") ?? string.Empty;
   }
